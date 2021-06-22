@@ -1,9 +1,9 @@
 package ir.ali.ApProject.ApProject;
 
 public class Product {
-    private static int n = 0;
+    private static int n = 1;
     public int ID;
-    public Category category;
+    public String category;
     public String subject;
     public String description;
     public String price;
@@ -17,8 +17,11 @@ public class Product {
         n++;
         ID = n;
     }
+    public Product(boolean lol)
+    {
 
-    public void setCategory(Category category) {
+    }
+    public void setCategory(String category) {
         this.category = category;
 
     }
