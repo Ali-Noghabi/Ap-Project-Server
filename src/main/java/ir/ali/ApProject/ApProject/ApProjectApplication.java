@@ -18,45 +18,38 @@ public class ApProjectApplication {
 	public static void main(String[] args) {
 
 		SpringApplication.run(ApProjectApplication.class, args);
-
+//		Connect connect = new Connect();
+//		System.out.println(connect);
 
 	}
 	public static void addProductToDataBase(String Json)
 	{
-		Product product = null;
-		try {
-			product = new Gson().fromJson(Json,
-					new TypeToken<Product>() {
-					}.getType()
-			);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
 
 
 	}
 	@GetMapping("/get")
 	public String GetUser()
 	{
-		ArrayList<Product> products = new ArrayList<>();
-		Product A = new Product();
-		A.setCategory(Category.CAR);
-		A.setInfo("Benz 2012" , "Brand New \n Only 200km Worked \n White" , "6000"  , true , "NoPhoto");
-		products.add(A);
-		Product B = new Product();
-		B.setCategory(Category.LAPTOP);
-		B.setInfo("Asus K20" , "Brand New \n i7 9100k \n GTX 3080" , "1200"  , false , "NoPhoto");
-//		products.add(B);
-		String Json = new Gson().toJson(products);
-
-		return Json;
+//		ArrayList<Product> products = new ArrayList<>();
+//		Product A = new Product();
+//		A.setCategory("CAR");
+//		A.setInfo("Benz 2012" , "Brand New \n Only 200km Worked \n White" , "6000"  , true , "NoPhoto");
+//		products.add(A);
+//		Product B = new Product();
+//		B.setCategory("LAPTOP");
+//		B.setInfo("Asus K20" , "Brand New \n i7 9100k \n GTX 3080" , "1200"  , false , "NoPhoto");
+////		products.add(B);
+//		String Json = new Gson().toJson(products);
+//
+//		return Json;
+		Select select = new Select();
+		return select.selectAll();
 	}
 
 	@PostMapping("/get")
-	public String PostProducts(@RequestBody String name)
+	public static Product PostProducts(@RequestBody String name)
 	{
-//		System.out.println(name);
-//		return "salam";
 		Product product = null;
 		try {
 			product = new Gson().fromJson(name,
@@ -66,13 +59,9 @@ public class ApProjectApplication {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return product.price;
-	}
-	@PostMapping("/test")
-	public Product test(@RequestBody Product name)
-	{
-		System.out.println(name);
-		return name;
+		Insert tempProduct = new Insert();
+		tempProduct.insertProduct(product);
+		return product;
 	}
 }
 //@GetMapping("/salam")
