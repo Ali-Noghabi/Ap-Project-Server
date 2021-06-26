@@ -21,25 +21,6 @@ public class Product {
     {
 
     }
-    public void setCategory(String category) {
-        this.category = category;
 
-    }
 
-    public void setInfo(String Subject, String Description, String Price, Boolean IsStar, String PhotoLink) {
-        //set main information's about product
-        this.subject = Subject;
-        this.description = Description;
-        this.price = Price;
-        this.isStar = IsStar;
-        this.photoLink = PhotoLink;
-    }
-
-    public void setSellerID(String sellerID) {
-        this.sellerID = sellerID;
-    }
-
-    public void setBuyerID(String buyerID) {
-        this.buyerID = buyerID;
-    }
 }
