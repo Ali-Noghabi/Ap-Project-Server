@@ -26,7 +26,7 @@ public class Select {
     }
 
 
-    public String selectAll() {
+    public String selectAllProducts() {
         String sql = "SELECT * FROM products";
 
         try {
@@ -52,6 +52,35 @@ public class Select {
 
             //Write On Json
             String Return = new Gson().toJson(tempProducts);
+            return Return;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+
+    }
+    public String selectAllUsers() {
+        String sql = "SELECT * FROM users";
+
+        try {
+            Connection conn = this.connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            ArrayList<User> tempUsers = new ArrayList<>();
+            // loop through the result set
+            while (rs.next()) {
+                User tempUser = new User(true);
+                tempUser.email = rs.getString("Email");
+                tempUser.name = rs.getString("FullName");
+                tempUser.password = rs.getString("password");
+                tempUser.phoneNum = rs.getString("PhoneNumber");
+                tempUser.loginCounter = rs.getInt("LoginCounter");
+                tempUsers.add(tempUser);
+
+            }
+
+            //Write On Json
+            String Return = new Gson().toJson(tempUsers);
             return Return;
         } catch (SQLException e) {
             System.out.println(e.getMessage());

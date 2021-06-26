@@ -42,11 +42,22 @@ public class Insert {
             System.out.println(e.getMessage());
         }
     }
+    public void insertUser(User user) {
+        String sql = "INSERT INTO users(Email, FullName , password , PhoneNumber , LoginCounter) VALUES(?,?,?,?,?)";
 
-    public static void main(String[] args) {
+        try{
+            Connection conn = this.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, user.email);
+            pstmt.setString(2, user.name);
+            pstmt.setString(3, user.password);
+            pstmt.setString(4, user.phoneNum);
+            pstmt.setInt(5, user.loginCounter);;
 
-        Insert app = new Insert();
-        // insert three new rows
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }

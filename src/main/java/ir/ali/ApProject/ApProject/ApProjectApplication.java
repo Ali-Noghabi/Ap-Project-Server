@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -28,27 +29,21 @@ public class ApProjectApplication {
 
 
 	}
-	@GetMapping("/get")
-	public String GetUser()
+	@GetMapping("/getProducts")
+	public String GetProducts()
 	{
-//		ArrayList<Product> products = new ArrayList<>();
-//		Product A = new Product();
-//		A.setCategory("CAR");
-//		A.setInfo("Benz 2012" , "Brand New \n Only 200km Worked \n White" , "6000"  , true , "NoPhoto");
-//		products.add(A);
-//		Product B = new Product();
-//		B.setCategory("LAPTOP");
-//		B.setInfo("Asus K20" , "Brand New \n i7 9100k \n GTX 3080" , "1200"  , false , "NoPhoto");
-////		products.add(B);
-//		String Json = new Gson().toJson(products);
-//
-//		return Json;
 		Select select = new Select();
-		return select.selectAll();
+		return select.selectAllProducts();
+	}
+	@GetMapping("/getUsers")
+	public String GetUsers()
+	{
+		Select select = new Select();
+		return select.selectAllUsers();
 	}
 
-	@PostMapping("/get")
-	public static Product PostProducts(@RequestBody String name)
+	@PostMapping("/postProduct")
+	public static Product PostProduct(@RequestBody String name)
 	{
 		Product product = null;
 		try {
@@ -59,15 +54,36 @@ public class ApProjectApplication {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		Insert tempProduct = new Insert();
-		tempProduct.insertProduct(product);
+		Insert tempInsert = new Insert();
+		tempInsert.insertProduct(product);
 		return product;
 	}
+	@PostMapping("/postUser")
+	public static User PostUser(@RequestBody String name)
+	{
+		User user = null;
+		try {
+			user = new Gson().fromJson(name,
+					new TypeToken<User>() {
+					}.getType()
+			);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Insert tempInsert = new Insert();
+		tempInsert.insertUser(user);
+		return user;
+	}
+	@GetMapping("/salam")
+	public String salam() {
+		User testUser = new User("email@email.xyz" , "test" , "test!@#" , "+98TEST");
+		Product testProduct = new Product();
+		testProduct.setInfo("a" , "b" , "c" , true, "e");
+		String json = new Gson().toJson(testProduct);
+		return json;
+	}
 }
-//@GetMapping("/salam")
-//	public String salam(@RequestParam(value = "name", defaultValue = "World") String name) {
-//		return String.format("Hello %s!", name);
-//	}
+
 //	@RequestMapping(value = "/" ,method = RequestMethod.GET)
 //	public String home()
 //	{
