@@ -8,9 +8,6 @@ public class User {
     public String password;
     public String phoneNum;
     public static int loginCounter=0;
-    public ArrayList<Integer> soldItems;
-    public ArrayList<Integer>  broughtItems;
-    public ArrayList<Integer>  availableItems; ///products that are available to sell
 
     public User(String email,String name,String password,String phoneNum){
         this.email=email;
@@ -18,9 +15,6 @@ public class User {
         this.password=password;
         this.phoneNum=phoneNum;
         loginCounter=loginCounter++;
-        soldItems=new ArrayList<>();
-        broughtItems=new ArrayList<>();
-        availableItems=new ArrayList<>();
     }
 
 
