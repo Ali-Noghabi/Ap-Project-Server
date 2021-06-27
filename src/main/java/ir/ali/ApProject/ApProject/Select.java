@@ -59,7 +59,7 @@ public class Select {
         return "";
 
     }
-    public String selectAllUsers() {
+    public ArrayList<User> selectAllUsers() {
         String sql = "SELECT * FROM users";
 
         try {
@@ -80,12 +80,12 @@ public class Select {
             }
 
             //Write On Json
-            String Return = new Gson().toJson(tempUsers);
-            return Return;
+//            String Return = new Gson().toJson(tempUsers);
+            return tempUsers;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return "";
+        return null;
 
     }
 }
