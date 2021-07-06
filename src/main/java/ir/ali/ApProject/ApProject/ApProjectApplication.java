@@ -1,5 +1,6 @@
 package ir.ali.ApProject.ApProject;
 
+import com.google.gson.JsonObject;
 import ir.ali.ApProject.ApProject.FirstPage.LoginInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -12,8 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @SpringBootApplication
 @RestController
 public class ApProjectApplication {
-//	private String LoginToken;
-	public Boolean loginStatus = false;
+
 	public static void main(String[] args) {
 
 		SpringApplication.run(ApProjectApplication.class, args);
@@ -24,13 +24,13 @@ public class ApProjectApplication {
 	public static User PostUser(@RequestBody String name)
 	{
 		User user = null;
-		try {
-			user = new Gson().fromJson(name,
-					new TypeToken<User>() {
-					}.getType()
-			);
-		} catch (Exception e) {
-			e.printStackTrace();
+			try {
+				user = new Gson().fromJson(name,
+						new TypeToken<User>() {
+						}.getType()
+				);
+			} catch (Exception e) {
+				e.printStackTrace();
 		}
 		Insert tempInsert = new Insert();
 		tempInsert.insertUser(user);
@@ -42,13 +42,15 @@ public class ApProjectApplication {
 	public String GetUsers()
 	{
 		Select select = new Select();
-		return new Gson().toJson(select.selectAllUsers());
+		return new Gson().toJson(select.selectAllUsersSafe());
 	}
 
 	//add new Product
 	@PostMapping("/postProduct")
 	public static Product PostProduct(@RequestBody String name)
 	{
+		Select tempSelect = new Select();
+		tempSelect.selectAllUsers();
 		Product product = null;
 		try {
 			product = new Gson().fromJson(name,
@@ -73,7 +75,7 @@ public class ApProjectApplication {
 
 	//Login
 	@PostMapping("/login")
-	public void Login(@RequestBody String name)
+	public String Login(@RequestBody String name)
 	{
 		LoginInfo loginInfo = null;
 		try {
@@ -84,18 +86,33 @@ public class ApProjectApplication {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		String Token = "";
+		JsonObject ret = new JsonObject();
 		Select select = new Select();
+		boolean userFindFlag = false;
 		for (User tempUser:select.selectAllUsers()){
 			if(tempUser.email.equals(loginInfo.email) && tempUser.password.equals(loginInfo.password))
 			{
-				this.loginStatus = true;
+				Token = tempUser.token;
+				ret.addProperty("username" , tempUser.email);
+				ret.addProperty("token" , Token);
+				ret.addProperty("code" , 200);
+				userFindFlag = true;
 			}
+
 		}
+		if(userFindFlag == false)
+		{
+			ret.addProperty("code" , 404);
+			ret.addProperty("msg" , "user or password is incorrect");
+
+		}
+		return ret.toString();
 	}
 
 	//login result
-	@GetMapping("/login")
-	public Boolean GetLoginRes(){return loginStatus;}
+//	@GetMapping("/login")
+//	public Boolean GetLoginRes(){return loginStatus;}
 
 	@GetMapping("/salam")
 	public String salam() {

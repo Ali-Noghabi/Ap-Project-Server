@@ -43,7 +43,7 @@ public class Insert {
         }
     }
     public void insertUser(User user) {
-        String sql = "INSERT INTO users(Email, FullName , password , PhoneNumber , LoginCounter) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO users(Email, FullName , password , PhoneNumber , LoginCounter , Token) VALUES(?,?,?,?,?,?)";
 
         try{
             Connection conn = this.connect();
@@ -52,7 +52,8 @@ public class Insert {
             pstmt.setString(2, user.name);
             pstmt.setString(3, user.password);
             pstmt.setString(4, user.phoneNum);
-            pstmt.setInt(5, user.loginCounter);;
+            pstmt.setInt(5, user.loginCounter);
+            pstmt.setString(6, user.createToken());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {

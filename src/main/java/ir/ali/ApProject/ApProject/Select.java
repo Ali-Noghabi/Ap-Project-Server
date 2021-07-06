@@ -75,6 +75,34 @@ public class Select {
                 tempUser.password = rs.getString("password");
                 tempUser.phoneNum = rs.getString("PhoneNumber");
                 tempUser.loginCounter = rs.getInt("LoginCounter");
+                tempUser.token = rs.getString("Token");
+                tempUsers.add(tempUser);
+
+            }
+
+            //Write On Json
+//            String Return = new Gson().toJson(tempUsers);
+            return tempUsers;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+
+    }
+    public ArrayList<User> selectAllUsersSafe() {
+        String sql = "SELECT * FROM users";
+
+        try {
+            Connection conn = this.connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            ArrayList<User> tempUsers = new ArrayList<>();
+            // loop through the result set
+            while (rs.next()) {
+                User tempUser = new User(true);
+                tempUser.email = rs.getString("Email");
+                tempUser.name = rs.getString("FullName");
+                tempUser.phoneNum = rs.getString("PhoneNumber");
                 tempUsers.add(tempUser);
 
             }
