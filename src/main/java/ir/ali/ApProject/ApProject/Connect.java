@@ -8,7 +8,7 @@ public class Connect {
     /**
      * Connect to a sample database
      */
-    public static String url = "jdbc:sqlite:C://Users/ali's pc/Desktop/ApProject/DB/Products.db";
+    public static String url = "jdbc:sqlite:C://Users/ali's pc/Desktop/ApProject/DB/mydatabase.db";
 
     public static void connect() {
         Connection conn = null;
