@@ -17,7 +17,18 @@ public class SearchProduct {
         }
         return starProducts;
     }
+    public static ArrayList<Product> searchNonStarProducts(ArrayList<Product> products,String searchSubject){
 
+        ArrayList<Product> nonStarProducts=new ArrayList<>();
+        for(Product product:products){
+            if(product.buyerID!=null && (product.subject.contains(searchSubject)
+                    || product.description.contains(searchSubject))) {
+                if (product.isStar == false)
+                    nonStarProducts.add(product);
+            }
+        }
+        return nonStarProducts;
+    }
 
 
 
