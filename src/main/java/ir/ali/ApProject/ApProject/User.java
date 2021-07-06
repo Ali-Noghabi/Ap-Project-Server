@@ -23,6 +23,8 @@ public class User {
     public String createToken() {
         String uuid = UUID.randomUUID().toString();
         this.token = uuid.replace("-" , "");
+        Edit tempEdit = new Edit();
+        tempEdit.editToken(this.token , this.email);
         return this.token;
 
     }

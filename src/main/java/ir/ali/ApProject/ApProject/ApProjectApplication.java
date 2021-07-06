@@ -9,6 +9,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 
 @SpringBootApplication
 @RestController
@@ -47,10 +49,9 @@ public class ApProjectApplication {
 
 	//add new Product
 	@PostMapping("/postProduct")
-	public static Product PostProduct(@RequestBody String name)
-	{
-		Select tempSelect = new Select();
-		tempSelect.selectAllUsers();
+	public static Product PostProduct(@RequestBody String name) throws Exception {
+
+
 		Product product = null;
 		try {
 			product = new Gson().fromJson(name,
@@ -60,6 +61,25 @@ public class ApProjectApplication {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		Select tempSelect = new Select();
+		User Seller = new User(true);
+		System.out.println(product.sellerToken);
+		ArrayList<User> SellersList = tempSelect.selectAllUsers();
+		for (User tempUser:SellersList ) {
+			System.out.println(tempUser.token);
+			if(tempUser.token.equals(product.sellerToken))
+			{
+				Seller = tempUser;
+
+			}
+
+		}
+		if(Seller.email == null)
+		{
+			throw new Exception("403 Token not provided");
+		}
+		product.sellerID = Seller.email;
 		Insert tempInsert = new Insert();
 		tempInsert.insertProduct(product);
 		return product;
@@ -117,10 +137,11 @@ public class ApProjectApplication {
 	@GetMapping("/salam")
 	public String salam() {
 //		User testUser = new User("email@email.xyz" , "test" , "test!@#" , "+98TEST");
-//		Product testProduct = new Product();
-//		testProduct.setInfo("a" , "b" , "c" , true, "e");
-		LoginInfo testLogin = new LoginInfo("aliabdollahina@gmail.com" , "ali123ali" , "00:01");
-		String json = new Gson().toJson(testLogin);
+		Product testProduct = new Product();
+		testProduct.setInfo("a" , "b" , "c" , true, "e");
+		testProduct.sellerToken = "ss";
+//		LoginInfo testLogin = new LoginInfo("aliabdollahina@gmail.com" , "ali123ali" , "00:01");
+		String json = new Gson().toJson(testProduct);
 		return json;
 	}
 }
