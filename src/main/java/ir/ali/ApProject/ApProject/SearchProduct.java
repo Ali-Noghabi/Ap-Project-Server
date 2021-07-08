@@ -29,7 +29,36 @@ public class SearchProduct {
         }
         return nonStarProducts;
     }
+    public static ArrayList<Product> searchStarProByCategory(ArrayList<Product> products,String category,String searchSubject){
 
+        ArrayList<Product> starProducts=new ArrayList<>();
+        for(Product product:products){
+            if(product.category.equals(category)){
+                if(product.buyerID!=null && (product.subject.contains(searchSubject)
+                        || product.description.contains(searchSubject))){
+                    if(product.isStar==true)
+                        starProducts.add(product);
+                }
+            }
+        }
+        return starProducts;
+    }
+
+
+    public static ArrayList<Product> searchNonStarProByCategory(ArrayList<Product> products,String category,String searchSubject){
+
+        ArrayList<Product> nonStarProducts=new ArrayList<>();
+        for(Product product:products){
+            if(product.category.equals(category)){
+                if(product.buyerID!=null && (product.subject.contains(searchSubject)
+                        || product.description.contains(searchSubject))) {
+                    if (product.isStar == false)
+                        nonStarProducts.add(product);
+                }
+            }
+        }
+        return nonStarProducts;
+    }
 
 
 }

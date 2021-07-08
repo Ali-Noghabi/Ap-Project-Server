@@ -26,7 +26,7 @@ public class Select {
     }
 
 
-    public String selectAllProducts() {
+    public ArrayList<Product> selectAllProducts() {
         String sql = "SELECT * FROM products";
 
         try {
@@ -51,12 +51,12 @@ public class Select {
             }
 
             //Write On Json
-            String Return = new Gson().toJson(tempProducts);
-            return Return;
+//            String Return = new Gson().toJson(tempProducts);
+            return tempProducts;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return "";
+        return null;
 
     }
     public ArrayList<User> selectAllUsers() {

@@ -1,10 +1,12 @@
 package ir.ali.ApProject.ApProject;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import ir.ali.ApProject.ApProject.FirstPage.LoginInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.juli.logging.Log;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
@@ -90,7 +92,7 @@ public class ApProjectApplication {
 	public String GetProducts()
 	{
 		Select select = new Select();
-		return select.selectAllProducts();
+		return new Gson().toJson(select.selectAllProducts());
 	}
 
 	//Login
@@ -144,6 +146,31 @@ public class ApProjectApplication {
 		String json = new Gson().toJson(testProduct);
 		return json;
 	}
+	@PostMapping("/search")
+	public String Search(@RequestBody String input)
+
+	{
+		Select tempSelect = new Select();
+		JsonObject obj = new JsonParser().parse(input).getAsJsonObject();
+		String resultAsJson = "";
+		String category = obj.get("category").getAsString();
+		String query =  obj.get("query").getAsString();
+		System.out.println(category + "    " + query);
+		if(category.equals("--"))
+		{
+			System.out.println("im hereeeeeeeeeeeeeeeee");
+			resultAsJson = new Gson().toJson(SearchProduct.searchStarProducts(tempSelect.selectAllProducts(),query)) +
+					new Gson().toJson(SearchProduct.searchNonStarProducts(tempSelect.selectAllProducts() , query));
+		}
+		else
+		{
+			System.out.println("lool");
+			resultAsJson = new Gson().toJson(SearchProduct.searchStarProByCategory(tempSelect.selectAllProducts(),category ,query)) +
+					new Gson().toJson(SearchProduct.searchNonStarProByCategory(tempSelect.selectAllProducts(),category , query));
+		}
+		return resultAsJson;
+	}
+
 }
 
 //	@RequestMapping(value = "/" ,method = RequestMethod.GET)
