@@ -103,6 +103,7 @@ public class Select {
                 tempUser.email = rs.getString("Email");
                 tempUser.name = rs.getString("FullName");
                 tempUser.phoneNum = rs.getString("PhoneNumber");
+                tempUser.loginCounter = rs.getInt("LoginCounter");
                 tempUsers.add(tempUser);
 
             }

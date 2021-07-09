@@ -11,6 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 @SpringBootApplication
@@ -87,7 +88,6 @@ public class ApProjectApplication {
     }
 
     //Login
-
     @PostMapping("/login")
     public String Login(@RequestBody String name) {
         LoginInfo loginInfo = null;
@@ -105,8 +105,15 @@ public class ApProjectApplication {
         boolean userFindFlag = false;
         for (User tempUser : select.selectAllUsers()) {
             if (tempUser.email.equals(loginInfo.email) && tempUser.password.equals(loginInfo.password)) {
+
+                //update token with new random
                 tempUser.createToken();
                 Token = tempUser.token;
+
+                //login counter++
+                Edit tempEdit = new Edit();
+                tempEdit.addLoginCounter(tempUser.email);
+
                 ret.addProperty("username", tempUser.email);
                 ret.addProperty("token", Token);
                 ret.addProperty("code", 200);
@@ -121,8 +128,8 @@ public class ApProjectApplication {
         }
         return ret.toString();
     }
-    //search query as String between products (include category)
 
+    //search query as String between products (include category)
     @PostMapping("/search")
     public String Search(@RequestBody String input) {
         Select tempSelect = new Select();
@@ -139,8 +146,8 @@ public class ApProjectApplication {
         }
         return new Gson().toJson(searchResult);
     }
-    //buy product (set buyerID for product)
 
+    //buy product (set buyerID for product)
     @PostMapping("/buy")
     public String Buy(@RequestBody String input) throws Exception {
         JsonObject obj = new JsonParser().parse(input).getAsJsonObject();
@@ -179,6 +186,28 @@ public class ApProjectApplication {
         return new Gson().toJson(ret);
     }
 
+    //Admin Manager : get list of all Sellers Name
+    @GetMapping("/AM/getSellers")
+    public String GetSellersName() {
+        Select select = new Select();
+        ArrayList<String> ret = new ArrayList<>();
+        for (Product tempProduct:   select.selectAllProducts()) {
+            if(ret.contains(tempProduct.sellerID)== false)
+                ret.add(tempProduct.sellerID);
+        }
+        return new Gson().toJson(ret);
+    }
+
+    //Admin Manager : get Hashmap of users And loginCounter
+    @GetMapping("/AM/getLoginCounter")
+    public String GetLoginCounter() {
+        Select select = new Select();
+        HashMap<String , Integer> ret = new HashMap<>();
+        for (User tempUser : select.selectAllUsersSafe()) {
+            ret.put(tempUser.email , tempUser.loginCounter);
+        }
+        return new Gson().toJson(ret);
+    }
 
     //test Spring Boot
     /*

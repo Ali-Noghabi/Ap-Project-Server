@@ -43,4 +43,25 @@ public class Edit {
             System.out.println(e.getMessage());
         }
     }
+   public void addLoginCounter(String UserEmail) {
+        String sql = "UPDATE users SET LoginCounter = ? WHERE Email = ?";
+        Select tempSelect = new Select();
+        int logincnt = 0;
+       for (User tempUser:tempSelect.selectAllUsers()) {
+//           System.out.println("|" + tempUser.email +"|   |"+ UserEmail + "|");
+           if(tempUser.email.equals(UserEmail)) {
+               System.out.println("here");
+               logincnt = tempUser.loginCounter;
+           }
+       }
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            System.out.println("lgn cnt : " + logincnt);
+            pstmt.setInt(1, logincnt+1);
+            pstmt.setString(2, UserEmail);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
