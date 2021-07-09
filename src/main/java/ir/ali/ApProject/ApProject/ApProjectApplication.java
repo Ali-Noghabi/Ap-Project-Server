@@ -209,6 +209,16 @@ public class ApProjectApplication {
         return new Gson().toJson(ret);
     }
 
+    //Admin Manager : get Hashmap of users And sold items counter
+    @GetMapping("/AM/getBestSeller")
+    public String GetBestSeller() {
+        Select select = new Select();
+        HashMap<String , Integer> ret = new HashMap<>();
+        AdminManager adminManagerTemp = new AdminManager();
+        ret = adminManagerTemp.findBestSeller(select.selectAllUsersSafe(), select.selectAllProducts());
+        return new Gson().toJson(ret);
+    }
+
     //test Spring Boot
     /*
     @GetMapping("/salam")

@@ -57,7 +57,7 @@ public class Edit {
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             System.out.println("lgn cnt : " + logincnt);
-            pstmt.setInt(1, logincnt+1);
+            pstmt.setInt(1, logincnt + 1);
             pstmt.setString(2, UserEmail);
             pstmt.executeUpdate();
         } catch (SQLException e) {
