@@ -87,6 +87,7 @@ public class ApProjectApplication {
     }
 
     //Login
+
     @PostMapping("/login")
     public String Login(@RequestBody String name) {
         LoginInfo loginInfo = null;
@@ -120,8 +121,8 @@ public class ApProjectApplication {
         }
         return ret.toString();
     }
-
     //search query as String between products (include category)
+
     @PostMapping("/search")
     public String Search(@RequestBody String input) {
         Select tempSelect = new Select();
@@ -138,8 +139,8 @@ public class ApProjectApplication {
         }
         return new Gson().toJson(searchResult);
     }
-
     //buy product (set buyerID for product)
+
     @PostMapping("/buy")
     public String Buy(@RequestBody String input) throws Exception {
         JsonObject obj = new JsonParser().parse(input).getAsJsonObject();
@@ -166,15 +167,28 @@ public class ApProjectApplication {
         return ret.toString();
     }
 
+    //Admin Manager : get list of all products name
+    @GetMapping("/AM/getProducts")
+    public String GetProductsName() {
+        Select select = new Select();
+        ArrayList<String> ret = new ArrayList<>();
+        for (Product tempProduct: select.selectAllProducts()) {
+            ret.add(tempProduct.subject);
+        }
+
+        return new Gson().toJson(ret);
+    }
+
+
     //test Spring Boot
     /*
     @GetMapping("/salam")
     public String salam() {
-//		User testUser = new User("email@email.xyz" , "test" , "test!@#" , "+98TEST");
+		User testUser = new User("email@email.xyz" , "test" , "test!@#" , "+98TEST");
         Product testProduct = new Product();
         testProduct.setInfo("a", "b", "c", true, "e");
         testProduct.sellerToken = "ss";
-//		LoginInfo testLogin = new LoginInfo("aliabdollahina@gmail.com" , "ali123ali" , "00:01");
+		LoginInfo testLogin = new LoginInfo("aliabdollahina@gmail.com" , "ali123ali" , "00:01");
         String json = new Gson().toJson(testProduct);
         return json;
     }
