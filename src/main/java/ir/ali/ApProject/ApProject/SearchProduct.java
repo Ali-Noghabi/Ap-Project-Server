@@ -9,7 +9,7 @@ public class SearchProduct {
 
         ArrayList<Product> starProducts=new ArrayList<>();
         for(Product product:products){
-           if(product.buyerID!=null && (product.subject.contains(searchSubject)
+           if(product.buyerID==null && (product.subject.contains(searchSubject)
                    || product.description.contains(searchSubject))){
               if(product.isStar==true)
                  starProducts.add(product);
@@ -21,7 +21,7 @@ public class SearchProduct {
 
         ArrayList<Product> nonStarProducts=new ArrayList<>();
         for(Product product:products){
-            if(product.buyerID!=null && (product.subject.contains(searchSubject)
+            if(product.buyerID==null && (product.subject.contains(searchSubject)
                     || product.description.contains(searchSubject))) {
                 if (product.isStar == false)
                     nonStarProducts.add(product);
@@ -33,8 +33,9 @@ public class SearchProduct {
 
         ArrayList<Product> starProducts=new ArrayList<>();
         for(Product product:products){
+            System.out.println("|" + product.category + "| vs |" + category + "|");
             if(product.category.equals(category)){
-                if(product.buyerID!=null && (product.subject.contains(searchSubject)
+                if(product.buyerID==null && (product.subject.contains(searchSubject)
                         || product.description.contains(searchSubject))){
                     if(product.isStar==true)
                         starProducts.add(product);
@@ -50,7 +51,7 @@ public class SearchProduct {
         ArrayList<Product> nonStarProducts=new ArrayList<>();
         for(Product product:products){
             if(product.category.equals(category)){
-                if(product.buyerID!=null && (product.subject.contains(searchSubject)
+                if(product.buyerID==null && (product.subject.contains(searchSubject)
                         || product.description.contains(searchSubject))) {
                     if (product.isStar == false)
                         nonStarProducts.add(product);
