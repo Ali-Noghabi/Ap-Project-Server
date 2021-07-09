@@ -20,7 +20,7 @@ public class Edit {
     }
 
     public void editToken(String token , String email) {
-        String sql = "INSERT INTO users(Token) VALUES(?) WHERE Email = (?)";
+        String sql = "UPDATE users SET Token = ? WHERE Email = ?";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -32,7 +32,7 @@ public class Edit {
         }
     }
     public void editBuyerID(String BuyerID , int productID) {
-        String sql = "INSERT INTO products(BuyerID) VALUES(?) WHERE ID = (?)";
+        String sql = "UPDATE products SET BuyerID = ? WHERE ID = ?";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -40,7 +40,6 @@ public class Edit {
             pstmt.setInt(2, productID);
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("in catch");
             System.out.println(e.getMessage());
         }
     }

@@ -24,7 +24,6 @@ public class Insert {
         String sql = "INSERT INTO products(ID, Category , Subject , Description , Price , SellerID , BuyerID , PhotoLink ,IsStar ) VALUES(?,?,?,?,?,?,?,?,?)";
 
         try{
-//            Connect conn = new Connect();
             Connection conn = this.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, product.ID);
