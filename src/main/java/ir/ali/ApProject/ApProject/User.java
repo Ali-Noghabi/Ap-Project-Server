@@ -28,10 +28,6 @@ public class User {
         return this.token;
 
     }
-    public void AddLoginCounter()
-    {
-        loginCounter++;
-    }
 
 
 
