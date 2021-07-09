@@ -10,9 +10,9 @@ public class Product {
     public Boolean isStar;
     public String photoLink;
     public String sellerID;
-    public String buyerID;
+    public String buyerID = "";
     public String sellerToken;
-    public String buyerToken = "";
+    public String buyerToken;
 
     public Product() {
         //set ID

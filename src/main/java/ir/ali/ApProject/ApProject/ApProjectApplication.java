@@ -125,9 +125,51 @@ public class ApProjectApplication {
         return ret.toString();
     }
 
-    //login result
-//	@GetMapping("/login")
-//	public Boolean GetLoginRes(){return loginStatus;}
+    @PostMapping("/search")
+    public String Search(@RequestBody String input) {
+        Select tempSelect = new Select();
+        JsonObject obj = new JsonParser().parse(input).getAsJsonObject();
+        String category = obj.get("category").getAsString();
+        String query = obj.get("query").getAsString();
+        System.out.println("|" + category + "|" + "    " + query);
+        ArrayList<Product> searchResult = new ArrayList<>();
+        if (category.equals("-")) {
+            searchResult.addAll(SearchProduct.searchStarProducts(tempSelect.selectAllProducts(), query));
+            searchResult.addAll(SearchProduct.searchNonStarProducts(tempSelect.selectAllProducts(), query));
+        } else {
+            searchResult.addAll(SearchProduct.searchStarProByCategory(tempSelect.selectAllProducts(), category, query));
+            searchResult.addAll(SearchProduct.searchNonStarProByCategory(tempSelect.selectAllProducts(), category, query));
+        }
+        return new Gson().toJson(searchResult);
+    }
+
+    @PostMapping("/buy")
+    public String Buy(@RequestBody String input) throws Exception {
+        JsonObject obj = new JsonParser().parse(input).getAsJsonObject();
+        User buyer = new User(true);
+        Select tempSelect = new Select();
+        ArrayList<User> SellersList = tempSelect.selectAllUsers();
+        JsonObject ret = new JsonObject();
+        for (User tempUser : SellersList) {
+            System.out.println(tempUser.token);
+            if(obj.get("buyerToken").getAsString().equals(tempUser.token))
+            {
+                buyer = tempUser;
+                ret.addProperty("buyerID" , buyer.email);
+                ret.addProperty("buyerToken" , buyer.token);
+                ret.addProperty("productID" ,obj.get("productID").getAsInt());
+                ret.addProperty("code" , 200);
+            }
+        }
+        if(buyer.email == null) {
+            ret.addProperty("code" , 404);
+            ret.addProperty("msg" , "buyer Not found");
+            throw new Exception("403 Token not provided");
+        }
+        Edit tempEdit = new Edit();
+        tempEdit.editBuyerID(buyer.email , obj.get("productID").getAsInt());
+        return ret.toString();
+    }
 
     @GetMapping("/salam")
     public String salam() {
@@ -140,31 +182,4 @@ public class ApProjectApplication {
         return json;
     }
 
-    @PostMapping("/search")
-    public String Search(@RequestBody String input) {
-        Select tempSelect = new Select();
-        JsonObject obj = new JsonParser().parse(input).getAsJsonObject();
-        String resultAsJson = "";
-        String category = obj.get("category").getAsString();
-        String query = obj.get("query").getAsString();
-        System.out.println("|" + category + "|" + "    " + query);
-        ArrayList<Product> searchResult = new ArrayList<>();
-        if (category.equals("-")) {
-            System.out.println("im hereeeeeeeeeeeeeeeee");
-            searchResult.addAll(SearchProduct.searchStarProducts(tempSelect.selectAllProducts(), query));
-            searchResult.addAll(SearchProduct.searchNonStarProducts(tempSelect.selectAllProducts(), query));
-        } else {
-            System.out.println("lool");
-            searchResult.addAll(SearchProduct.searchStarProByCategory(tempSelect.selectAllProducts(), category, query));
-            searchResult.addAll(SearchProduct.searchNonStarProByCategory(tempSelect.selectAllProducts(), category, query));
-        }
-        return new Gson().toJson(searchResult);
-    }
-
 }
-
-//	@RequestMapping(value = "/" ,method = RequestMethod.GET)
-//	public String home()
-//	{
-//		return "salam";
-//	}
