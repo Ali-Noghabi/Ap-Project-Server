@@ -24,7 +24,7 @@ public class ApProjectApplication {
 
     //add New user to database / signUp
     @PostMapping("/postUser")
-    public static User PostUser(@RequestBody String name) {
+    public static String PostUser(@RequestBody String name) {
         User user = null;
         try {
             user = new Gson().fromJson(name,
@@ -34,9 +34,26 @@ public class ApProjectApplication {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        boolean isExist = false;
+        Select select = new Select();
+        for (User tempUser: select.selectAllUsers()) {
+            if(tempUser.email.equals(user.email))
+                isExist = true;
+        }
         Insert tempInsert = new Insert();
-        tempInsert.insertUser(user);
-        return user;
+        JsonObject obj = new JsonObject();
+        if(isExist == false) {
+            obj.addProperty("username" , user.email);
+            obj.addProperty("token" , user.token);
+            obj.addProperty("code" , "200");
+            tempInsert.insertUser(user);
+        }
+        else
+        {
+            obj.addProperty("code" , "404");
+            obj.addProperty("msg" , "username is already taken");
+        }
+        return obj.toString();
     }
 
     //get list of all users
