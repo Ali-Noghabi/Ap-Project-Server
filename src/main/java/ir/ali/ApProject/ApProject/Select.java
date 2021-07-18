@@ -1,6 +1,7 @@
 package ir.ali.ApProject.ApProject;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -46,6 +47,43 @@ public class Select {
                 tempProduct.buyerID = rs.getString("BuyerID");
                 tempProduct.photoLink = rs.getString("PhotoLink");
                 tempProduct.isStar = rs.getBoolean("IsStar");
+                tempProducts.add(tempProduct);
+
+            }
+
+            //Write On Json
+//            String Return = new Gson().toJson(tempProducts);
+            return tempProducts;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+
+    }
+    public ArrayList<JsonObject> selectAllProducts2() {
+        String sql = "SELECT * FROM products INNER JOIN users ON products.SellerID = users.Email;";
+
+        try {
+            Connection conn = this.connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            ArrayList<JsonObject> tempProducts = new ArrayList<>();
+            // loop through the result set
+            while (rs.next()) {
+
+                JsonObject tempProduct = new JsonObject();
+                tempProduct.addProperty("ID" , rs.getInt("ID"));
+                tempProduct.addProperty("subject" , rs.getString("Subject"));
+                tempProduct.addProperty("category" , rs.getString("Category"));
+                tempProduct.addProperty("description" , rs.getString("Description"));
+                tempProduct.addProperty("price" , rs.getString("Price"));
+                tempProduct.addProperty("isStar" , rs.getString("IsStar"));
+                tempProduct.addProperty("sellerID" , rs.getString("SellerID"));
+                tempProduct.addProperty("buyerID" , rs.getString("BuyerID"));
+                tempProduct.addProperty("photoLink" , rs.getString("PhotoLink"));
+                tempProduct.addProperty("Phone" , rs.getString("PhoneNumber"));
+                tempProduct.addProperty("sellerName" , rs.getString("FullName"));
+
                 tempProducts.add(tempProduct);
 
             }

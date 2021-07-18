@@ -9,7 +9,7 @@ public class SearchProduct {
 
         ArrayList<Product> starProducts = new ArrayList<>();
         for (Product product : products) {
-            if (product.buyerID == null && (product.subject.contains(searchSubject)
+            if (product.buyerID.equals("") && (product.subject.contains(searchSubject)
                     || product.description.contains(searchSubject))) {
                 if (product.isStar == true)
                     starProducts.add(product);
@@ -22,7 +22,7 @@ public class SearchProduct {
 
         ArrayList<Product> nonStarProducts = new ArrayList<>();
         for (Product product : products) {
-            if (product.buyerID == null && (product.subject.contains(searchSubject)
+            if (product.buyerID.equals("") && (product.subject.contains(searchSubject)
                     || product.description.contains(searchSubject))) {
                 if (product.isStar == false)
                     nonStarProducts.add(product);

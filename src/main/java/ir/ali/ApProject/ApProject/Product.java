@@ -1,8 +1,8 @@
 package ir.ali.ApProject.ApProject;
 
 public class Product {
-    private static int n = 1;
-    public int ID;
+    public static int n = 1;
+    public int ID = -1;
     public String category = "-";
     public String subject;
     public String description;

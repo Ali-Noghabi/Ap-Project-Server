@@ -19,7 +19,7 @@ public class Edit {
         return conn;
     }
 
-    public void editToken(String token , String email) {
+    public void editToken(String token, String email) {
         String sql = "UPDATE users SET Token = ? WHERE Email = ?";
 
         try (Connection conn = this.connect();
@@ -31,7 +31,8 @@ public class Edit {
             System.out.println(e.getMessage());
         }
     }
-    public void editBuyerID(String BuyerID , int productID) {
+
+    public void editBuyerID(String BuyerID, int productID) {
         String sql = "UPDATE products SET BuyerID = ? WHERE ID = ?";
 
         try (Connection conn = this.connect();
@@ -43,17 +44,61 @@ public class Edit {
             System.out.println(e.getMessage());
         }
     }
-   public void addLoginCounter(String UserEmail) {
+
+    public void editUserInfo(String name,String password,String phoneNum,String email) {
+        String sql = "UPDATE users SET FullName = ?,Password = ?,PhoneNumber = ? WHERE Email = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, name);
+            pstmt.setString(2,password);
+            pstmt.setString(3,phoneNum);
+            pstmt.setString(4,email);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void editProduct(String subject , String description,String price,String photoLink,int productID) {
+        String sql = "UPDATE products SET Subject = ?,Description=?,Price=?,PhotoLink=? WHERE ID = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, subject);
+            pstmt.setString(2, description);
+            pstmt.setString(3, price);
+            pstmt.setString(4, photoLink);
+            pstmt.setInt(5, productID);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void editProductStar(boolean Star,int productID) {
+        String sql = "UPDATE products SET IsStar = ? WHERE ID = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setBoolean(1, Star);
+            pstmt.setInt(2, productID);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void addLoginCounter(String UserEmail) {
         String sql = "UPDATE users SET LoginCounter = ? WHERE Email = ?";
         Select tempSelect = new Select();
         int logincnt = 0;
-       for (User tempUser:tempSelect.selectAllUsers()) {
+        for (User tempUser : tempSelect.selectAllUsers()) {
 //           System.out.println("|" + tempUser.email +"|   |"+ UserEmail + "|");
-           if(tempUser.email.equals(UserEmail)) {
-               System.out.println("here");
-               logincnt = tempUser.loginCounter;
-           }
-       }
+            if (tempUser.email.equals(UserEmail)) {
+                System.out.println("here");
+                logincnt = tempUser.loginCounter;
+            }
+        }
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             System.out.println("lgn cnt : " + logincnt);

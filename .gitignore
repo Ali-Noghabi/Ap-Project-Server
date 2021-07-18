@@ -1,5 +1,6 @@
 HELP.md
 target/classes/ir/ali/ApProject/ApProject
+src/main/java/ir/ali/ApProject/ApProject/Connect.java
 ### STS ###
 .apt_generated
 .classpath
