@@ -11,8 +11,22 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
+
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 
 @SpringBootApplication
@@ -55,6 +69,83 @@ public class ApProjectApplication {
         return obj.toString();
     }
 
+    @PostMapping("/forgetPass")
+    public static String Forget(@RequestBody String input)
+    {
+        JsonObject obj = new JsonParser().parse(input).getAsJsonObject();
+        String username = obj.get("username").getAsString();
+        String recPass = "USER NOT FOUND IN DATABASE";
+        Select select = new Select();
+
+        for (User tempUser: select.selectAllUsers()) {
+            if(tempUser.email.equals(username))
+                recPass = tempUser.password;
+        }
+        // Recipient's email ID needs to be mentioned.
+        String to = username;
+
+        // Sender's email ID needs to be mentioned
+        String from = "lucifer-team@aryakvn.ir";
+
+        // Assuming you are sending email from through gmails smtp
+        String host = "mail.aryakvn.ir";
+
+        // Get system properties
+        Properties properties = System.getProperties();
+
+        // Setup mail server
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", "587");
+        properties.put("mail.smtp.ssl.enable", "false");
+        properties.put("mail.smtp.auth", "true");
+
+        // Get the Session object.// and pass username and password
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+
+            protected PasswordAuthentication getPasswordAuthentication() {
+
+                return new PasswordAuthentication("lucifer-team@aryakvn.ir", "qweqsxqaz123");
+
+            }
+
+        });
+
+        // Used to debug SMTP issues
+        session.setDebug(true);
+
+        JsonObject ret = new JsonObject();
+        try {
+            // Create a default MimeMessage object.
+            MimeMessage message = new MimeMessage(session);
+
+            // Set From: header field of the header.
+            message.setFrom(new InternetAddress(from));
+
+            // Set To: header field of the header.
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+
+            // Set Subject: header field
+            message.setSubject("Password Recovery");
+
+            // Now set the actual message
+            if(recPass.equals("USER NOT FOUND IN DATABASE") == false)
+                message.setText("your password is : " + recPass + " \nplease change it");
+            else
+                message.setText(recPass);
+
+            System.out.println("sending...");
+            // Send message
+            Transport.send(message);
+            ret.addProperty("code" , 200);
+            System.out.println("Sent message successfully....");
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+            ret.addProperty("code" , 405);
+        }
+
+        return ret.toString();
+
+    }
     //add New user to database / signUp
     @PostMapping("/deleteProduct")
     public static boolean DeleteProduct(@RequestBody int ID) {
@@ -343,10 +434,10 @@ public class ApProjectApplication {
     @GetMapping("/AM/getBestSeller")
     public String GetBestSeller() {
         Select select = new Select();
-        HashMap<String, Integer> ret = new HashMap<>();
         AdminManager adminManagerTemp = new AdminManager();
-        ret = adminManagerTemp.findBestSeller(select.selectAllUsersSafe(), select.selectAllProducts());
-        return new Gson().toJson(ret);
+        JsonObject ret = new JsonObject();
+        ret.addProperty("best" ,adminManagerTemp.findBestSeller(select.selectAllUsersSafe(), select.selectAllProducts()));
+        return ret.toString();
     }
 
     //test Spring Boot

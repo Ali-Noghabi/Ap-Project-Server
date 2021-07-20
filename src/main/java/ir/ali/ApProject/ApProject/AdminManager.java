@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class AdminManager {
 
-    public HashMap<String,Integer>  findBestSeller(ArrayList<User>  allUsers,ArrayList<Product> allProducts ){
+    public String  findBestSeller(ArrayList<User>  allUsers,ArrayList<Product> allProducts ){
 
         HashMap<String,Integer> unSortedSellers=new HashMap<>();
 
@@ -30,7 +30,10 @@ public class AdminManager {
                 .sorted(Collections.reverseOrder(Entry.comparingByValue()))
                 .collect(Collectors.toMap(Entry::getKey, Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
-        return sortedSellers;
+        Map.Entry<String,Integer> entry = sortedSellers.entrySet().iterator().next();
+        String key = entry.getKey();
+
+        return key;
 
     }
 
